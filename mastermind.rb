@@ -1,13 +1,17 @@
+require 'colorize'
+
 class Mastermind
   def initialize
     @spaces = ['','','','']
-    @colors = ['R', 'G', 'B', 'Y', 'W', 'O', 'P', 'T']
+    @colors = ['R', 'G', 'B', 'Y', 'W', 'P', 'c']
     @comp_code = @colors.sample(4)
+    @winner = false
+    puts "\nMASTERMIND\n\n"
   end
 
   def player_turn
-    puts "Colors: #{@colors}"
-    puts "Take a guess. Input four colors like this: RGBY"
+    puts "Colors: #{" R ".on_red} #{' G '.on_green} #{" B ".on_blue} #{" Y ".on_yellow} #{" W ".on_white} #{" P ".on_magenta} #{" C ".on_cyan}"
+    puts "Take a guess. Input four colors like this: RGBY\n\n"
     player_input = gets.chomp.upcase.split("")
     turn_check(player_input)
   end
@@ -15,6 +19,10 @@ class Mastermind
   def turn_check(player_guess)
     right_color = 0
     right_place_and_color = 0
+    if player_guess == @comp_code
+      @winner = true
+      return
+    end
     player_guess.each_with_index do |color, index|
       if @comp_code.include?(color) && color == @comp_code[index]
         right_place_and_color += 1
@@ -40,8 +48,23 @@ class Mastermind
     end
   end
 
+  def game_loop
+    i = 1
+    until i == 12
+      unless @winner
+        puts "\nTurn #{i}/12\n\n"
+        player_turn
+      end
+      i += 1
+    end
+    if !@winner
+      puts "You lose!".red
+    else
+      puts "You win!".green
+    end
+  end
 
 end
 
 mmind = Mastermind.new
-mmind.player_turn
+mmind.game_loop
