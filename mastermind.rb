@@ -54,7 +54,7 @@ class Mastermind
 
   def game_loop
     i = 1
-    until i == 12
+    until i == 13
       unless @winner
         puts "\nTurn #{i}/12\n\n"
         player_turn
