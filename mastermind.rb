@@ -3,14 +3,18 @@ require 'colorize'
 class Mastermind
   def initialize
     @spaces = ['','','','']
-    @colors = ['R', 'G', 'B', 'Y', 'W', 'P', 'c']
-    @comp_code = @colors.sample(4)
+    @colors = ['R', 'G', 'B', 'Y', 'W', 'P', 'C']
+    @comp_code = new_code
     @winner = false
     puts "\nMASTERMIND\n\n"
   end
 
+  def new_code
+    @comp_code = @colors.sample(4)
+  end
+
   def player_turn
-    puts "Colors: #{" R ".on_red} #{' G '.on_green} #{" B ".on_blue} #{" Y ".on_yellow} #{" W ".on_white} #{" P ".on_magenta} #{" C ".on_cyan}"
+    puts "Colors: #{" R ".black.on_red} #{' G '.black.on_green} #{" B ".black.on_blue} #{" Y ".black.on_yellow} #{" W ".black.on_white} #{" P ".black.on_magenta} #{" C ".black.on_cyan}"
     puts "Take a guess. Input four colors like this: RGBY\n\n"
     player_input = gets.chomp.upcase.split("")
     turn_check(player_input)
@@ -32,9 +36,9 @@ class Mastermind
     end
 
     if right_color == 1
-      puts "You guessed 1 color correctly, but it was in the wrong spot!"
+      puts "\n\nYou guessed 1 color correctly, but it was in the wrong spot!"
     elsif right_color > 1
-      puts "You guessed #{right_color} colors correctly, but they were in the wrong spot!"
+      puts "\n\nYou guessed #{right_color} colors correctly, but they were in the wrong spot!"
     end
 
     if right_place_and_color == 1
@@ -44,7 +48,7 @@ class Mastermind
     end
 
     if right_color == 0 && right_place_and_color == 0
-      puts "You didn't guess any colors or their positions correctly. Really unlucky..."
+      puts "\n\nYou didn't guess any colors or their positions correctly. Really unlucky..."
     end
   end
 
@@ -58,9 +62,26 @@ class Mastermind
       i += 1
     end
     if !@winner
-      puts "You lose!".red
+      puts "\n\nYou lose!\nBetter luck next time!".red
+      puts "Do you want to play again? [y/n]"
+      yes_no = gets.chomp
+      new_game(yes_no)
     else
-      puts "You win!".green
+      puts "\n\nYou win!\nCongrats! You cracked the code!".green
+      puts "Do you want to play again? [y/n]"
+      yes_no = gets.chomp
+      new_game(yes_no)
+    end
+  end
+
+  def new_game(input)
+    input.downcase
+    if input == 'y'
+      @winner = false
+      new_code
+      game_loop
+    else
+      return
     end
   end
 
