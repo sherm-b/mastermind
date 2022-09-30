@@ -1,8 +1,7 @@
 require 'colorize'
 
-class Mastermind
+class MastermindHumanPlayer
   def initialize
-    @spaces = ['','','','']
     @colors = ['R', 'G', 'B', 'Y', 'W', 'P', 'C']
     @comp_code = new_code
     @winner = false
@@ -14,7 +13,7 @@ class Mastermind
   end
 
   def player_turn
-    puts "Colors: #{" R ".black.on_red} #{' G '.black.on_green} #{" B ".black.on_blue} #{" Y ".black.on_yellow} #{" W ".black.on_white} #{" P ".black.on_magenta} #{" C ".black.on_cyan}"
+    puts "Colors: #{" R ".black.on_red} #{" G ".black.on_green} #{" B ".black.on_blue} #{" Y ".black.on_yellow} #{" W ".black.on_white} #{" P ".black.on_magenta} #{" C ".black.on_cyan}"
     puts "Take a guess. Input four colors like this: RGBY\n\n"
     player_input = gets.chomp.upcase.split("")
     turn_check(player_input)
@@ -87,5 +86,30 @@ class Mastermind
 
 end
 
-mmind = Mastermind.new
-mmind.game_loop
+class MastermindCompPlayer < MastermindHumanPlayer
+  def initialize
+    puts "MASTERMIND\n\n"
+    puts "Make a code and the computer will try to guess it in 12 turns. If it doesn't, you win!"
+    puts "Colors: #{" R ".black.on_red} #{" G ".black.on_green} #{" B ".black.on_blue} #{" Y ".black.on_yellow} #{" W ".black.on_white} #{" P ".black.on_magenta} #{" C ".black.on_cyan}"
+    puts "Enter a 4 letter code of the letters above like this: RGBY"
+    @player_code = gets.chomp.upcase.split('')
+    @winner = false
+    @colors = ['R', 'G', 'B', 'Y', 'W', 'P', 'C']
+  end
+
+  def comp_guess
+    @colors.sample(4)
+  end
+
+  def game_loop
+    i = 1
+    while i <= 12
+      unless @winner
+        puts "Turn #{i}/12"
+        turn_check(comp_guess)
+      end
+      i+=1
+    end
+  end
+
+end
