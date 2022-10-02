@@ -92,13 +92,29 @@ class MastermindCompPlayer < MastermindHumanPlayer
     puts "Make a code and the computer will try to guess it in 12 turns. If it doesn't, you win!"
     puts "Colors: #{" R ".black.on_red} #{" G ".black.on_green} #{" B ".black.on_blue} #{" Y ".black.on_yellow} #{" W ".black.on_white} #{" P ".black.on_magenta} #{" C ".black.on_cyan}"
     puts "Enter a 4 letter code of the letters above like this: RGBY"
-    @player_code = gets.chomp.upcase.split('')
+    @comp_code = gets.chomp.upcase.split('')
     @winner = false
     @colors = ['R', 'G', 'B', 'Y', 'W', 'P', 'C']
+    @comp_guess_arr = Array.new
+    @comp_guess_right_color = Array.new
   end
 
   def comp_guess
-    @colors.sample(4)
+    if @comp_guess_arr.empty?
+      @comp_guess_arr = @colors.sample(4)
+      return @comp_guess_arr
+    elsif @comp_guess_right_color.length < 4
+      @comp_guess_arr.each do |color|
+        if @comp_code.include?(color) && !@comp_guess_right_color.include?(color)
+          @comp_guess_right_color << color
+        end
+      end
+    end
+    if @comp_guess_right_color.length == 4
+      @comp_guess_right_color.shuffle
+    else
+      @comp_guess_arr = @colors.sample(4)
+    end
   end
 
   def game_loop
@@ -109,6 +125,11 @@ class MastermindCompPlayer < MastermindHumanPlayer
         turn_check(comp_guess)
       end
       i+=1
+    end
+    if @winner
+      puts "You lose! The computer guessed your code!!!"
+    else
+      puts "You've outsmarted the computer! You're a genius!"
     end
   end
 
