@@ -77,7 +77,7 @@ class MastermindHumanPlayer
     input.downcase
     if input == 'y'
       @winner = false
-      new_code
+      initialize
       game_loop
     else
       return
@@ -127,9 +127,15 @@ class MastermindCompPlayer < MastermindHumanPlayer
       i+=1
     end
     if @winner
-      puts "You lose! The computer guessed your code!!!"
+      puts "You lose! The computer guessed your code!!!".red
+      puts "Do you want to play again? [y/n]"
+      yes_no = gets.chomp
+      new_game(yes_no)
     else
-      puts "You've outsmarted the computer! You're a genius!"
+      puts "You've outsmarted the computer! You're a genius!".green
+      puts "Do you want to play again? [y/n]"
+      yes_no = gets.chomp
+      new_game(yes_no)
     end
   end
 
