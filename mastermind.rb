@@ -2,7 +2,7 @@ require 'colorize'
 
 class MastermindHumanPlayer
   def initialize
-    @colors = ['R', 'G', 'B', 'Y', 'W', 'P', 'C']
+    @colors = %w[R G B Y W P C]
     @comp_code = new_code
     @winner = false
     puts "\nMASTERMIND\n\n"
@@ -13,9 +13,9 @@ class MastermindHumanPlayer
   end
 
   def player_turn
-    puts "Colors: #{" R ".black.on_red} #{" G ".black.on_green} #{" B ".black.on_blue} #{" Y ".black.on_yellow} #{" W ".black.on_white} #{" P ".black.on_magenta} #{" C ".black.on_cyan}"
+    puts "Colors: #{' R '.black.on_red} #{' G '.black.on_green} #{' B '.black.on_blue} #{' Y '.black.on_yellow} #{' W '.black.on_white} #{' P '.black.on_magenta} #{' C '.black.on_cyan}"
     puts "Take a guess. Input four colors like this: RGBY\n\n"
-    player_input = gets.chomp.upcase.split("")
+    player_input = gets.chomp.upcase.split('')
     turn_check(player_input)
   end
 
@@ -62,12 +62,12 @@ class MastermindHumanPlayer
     end
     if !@winner
       puts "\n\nYou lose!\nBetter luck next time!".red
-      puts "Do you want to play again? [y/n]"
+      puts 'Do you want to play again? [y/n]'
       yes_no = gets.chomp
       new_game(yes_no)
     else
       puts "\n\nYou win!\nCongrats! You cracked the code!".green
-      puts "Do you want to play again? [y/n]"
+      puts 'Do you want to play again? [y/n]'
       yes_no = gets.chomp
       new_game(yes_no)
     end
@@ -79,24 +79,21 @@ class MastermindHumanPlayer
       @winner = false
       initialize
       game_loop
-    else
-      return
     end
   end
-
 end
 
 class MastermindCompPlayer < MastermindHumanPlayer
   def initialize
     puts "MASTERMIND\n\n"
     puts "Make a code and the computer will try to guess it in 12 turns. If it doesn't, you win!"
-    puts "Colors: #{" R ".black.on_red} #{" G ".black.on_green} #{" B ".black.on_blue} #{" Y ".black.on_yellow} #{" W ".black.on_white} #{" P ".black.on_magenta} #{" C ".black.on_cyan}"
-    puts "Enter a 4 letter code of the letters above like this: RGBY"
+    puts "Colors: #{' R '.black.on_red} #{' G '.black.on_green} #{' B '.black.on_blue} #{' Y '.black.on_yellow} #{' W '.black.on_white} #{' P '.black.on_magenta} #{' C '.black.on_cyan}"
+    puts 'Enter a 4 letter code of the letters above like this: RGBY'
     @comp_code = gets.chomp.upcase.split('')
     @winner = false
-    @colors = ['R', 'G', 'B', 'Y', 'W', 'P', 'C']
-    @comp_guess_arr = Array.new
-    @comp_guess_right_color = Array.new
+    @colors = %w[R G B Y W P C]
+    @comp_guess_arr = []
+    @comp_guess_right_color = []
   end
 
   def comp_guess
@@ -105,9 +102,7 @@ class MastermindCompPlayer < MastermindHumanPlayer
       return @comp_guess_arr
     elsif @comp_guess_right_color.length < 4
       @comp_guess_arr.each do |color|
-        if @comp_code.include?(color) && !@comp_guess_right_color.include?(color)
-          @comp_guess_right_color << color
-        end
+        @comp_guess_right_color << color if @comp_code.include?(color) && !@comp_guess_right_color.include?(color)
       end
     end
     if @comp_guess_right_color.length == 4
@@ -124,51 +119,48 @@ class MastermindCompPlayer < MastermindHumanPlayer
         puts "Turn #{i}/12"
         turn_check(comp_guess)
       end
-      i+=1
+      i += 1
     end
     if @winner
-      puts "You lose! The computer guessed your code!!!".red
-      puts "Do you want to play again? [y/n]"
+      puts 'You lose! The computer guessed your code!!!'.red
+      puts 'Do you want to play again? [y/n]'
       yes_no = gets.chomp
       new_game(yes_no)
     else
       puts "You've outsmarted the computer! You're a genius!".green
-      puts "Do you want to play again? [y/n]"
+      puts 'Do you want to play again? [y/n]'
       yes_no = gets.chomp
       new_game(yes_no)
     end
   end
-
 end
 
 class ChooseYourAdventure
   def initialize
     puts "\n\nMASTERMIND\n\n"
-    puts "This is a codebreaking game! The rules are simple."
-    puts "One player will choose a 4 color code at the beginning of the game, and the other has 12 turns to guess that code."
-    puts "After each turn, the codebreaker will get feedback on how close their last guess was to the actual code."
+    puts 'This is a codebreaking game! The rules are simple.'
+    puts 'One player will choose a 4 color code at the beginning of the game, and the other has 12 turns to guess that code.'
+    puts 'After each turn, the codebreaker will get feedback on how close their last guess was to the actual code.'
     puts "If the guesser gets all 4 colors and their positions correct within 12 turns, they win. Otherwise, the codemaker wins.\n\n"
     puts "Let's play! Do you want to be the codemaker or the codebreaker? [cb/cm/exit]"
     @player_choice = gets.chomp.upcase
     maker_or_breaker(@player_choice)
   end
-  
+
   def maker_or_breaker(input)
-    if input == "CB"
+    if input == 'CB'
       mmind = MastermindHumanPlayer.new
       mmind.game_loop
-      self.initialize
-    elsif input == "CM"
+      initialize
+    elsif input == 'CM'
       mmind = MastermindCompPlayer.new
       mmind.game_loop
-      self.initialize
-    elsif input == "EXIT"
-      return
-    end 
+      initialize
+    elsif input == 'EXIT'
+      nil
+    end
   end
 end
-  
-
 
 main_menu = ChooseYourAdventure.new
 main_menu.initialize
