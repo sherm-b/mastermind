@@ -140,3 +140,35 @@ class MastermindCompPlayer < MastermindHumanPlayer
   end
 
 end
+
+class ChooseYourAdventure
+  def initialize
+    puts "\n\nMASTERMIND\n\n"
+    puts "This is a codebreaking game! The rules are simple."
+    puts "One player will choose a 4 color code at the beginning of the game, and the other has 12 turns to guess that code."
+    puts "After each turn, the codebreaker will get feedback on how close their last guess was to the actual code."
+    puts "If the guesser gets all 4 colors and their positions correct within 12 turns, they win. Otherwise, the codemaker wins.\n\n"
+    puts "Let's play! Do you want to be the codemaker or the codebreaker? [cb/cm/exit]"
+    @player_choice = gets.chomp.upcase
+    maker_or_breaker(@player_choice)
+  end
+  
+  def maker_or_breaker(input)
+    if input == "CB"
+      mmind = MastermindHumanPlayer.new
+      mmind.game_loop
+      self.initialize
+    elsif input == "CM"
+      mmind = MastermindCompPlayer.new
+      mmind.game_loop
+      self.initialize
+    elsif input == "EXIT"
+      return
+    end 
+  end
+end
+  
+
+
+main_menu = ChooseYourAdventure.new
+main_menu.initialize
